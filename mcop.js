@@ -1,5 +1,5 @@
-// mcop.js — Monte Carlo Options Pricing core math
-// Runs in a Web Worker via importScripts. No DOM, no external deps.
+// Monte Carlo Options Pricing core math
+// Runs in a Web Worker via importScripts
 
 // Abramowitz & Stegun rational approximation for Φ(x), accurate to ±7.5e-8
 function normalCdf(x) {
