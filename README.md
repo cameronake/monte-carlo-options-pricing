@@ -1,21 +1,15 @@
 # Monte Carlo Options Pricing
 
-A Monte Carlo simulation for pricing European options, with a Black-Scholes analytical solution as a real-time benchmark. Implements Geometric Brownian Motion path simulation and tracks convergence as sample count grows.
+Prices European call and put options via Monte Carlo, compared against Black-Scholes. With ~1,000 paths, the MC estimate is usually within a few cents of the analytical price, but gaining another decimal place requires 100× the samples (1/√N).
 
-**[Live demo →](https://cameronake.github.io/mcop-demo.html)**
-Price options instantly in your browser — pure JS, no server, no load delay.
+Monte Carlo methods have been interesting to me since I first learned about them. I wanted to try it out using a simulation with several moving parts for a problem with a closed-form answer so that I could create an interesting simulation while also watching it converge to something I can verify.
+
+**[Live demo](https://cameronake.github.io/mcop-demo.html)**
 
 ---
 
-## What's in `mcop.js`
+## How it works
 
-- **Black-Scholes** closed-form pricing for calls and puts, with Abramowitz & Stegun normal CDF approximation (±7.5×10⁻⁸ accuracy)
-- **Monte Carlo** via single-step GBM: `S_T = S · exp((r − σ²/2)T + σ√T·Z)`
-- **Box-Muller** transform for normal sampling
-- **GBM path generation** for multi-step path visualization
-- **Convergence tracking** at ~30 log-spaced checkpoints from N=1 to N_max
+Terminal prices are sampled from the exact GBM distribution, `S_T = S · exp((r − σ²/2)T + σ√T·Z)`, discounted, and averaged. Convergence is tracked at ~30 log-spaced sample counts. The core library (`mcop.js`) is dependency-free and runs in a Web Worker so the UI stays responsive during large simulations.
 
-## Stack
-
-- Vanilla JS (no dependencies, runs in a Web Worker for non-blocking simulation)
-- Chart.js for visualization
+Analytical pricing uses the Black-Scholes formula with an Abramowitz & Stegun rational approximation for Φ(x) (±7.5×10⁻⁸). Random normals come from Box-Muller. The path visualization tab plots 50 full multi-step GBM paths alongside the simulation.
